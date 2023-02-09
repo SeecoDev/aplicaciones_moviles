@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarjetapresentacion/home_page.dart';
+import 'package:dados/dice.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,16 +8,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'My Card',
+      title: 'Dado perron',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const Dice(),
     );
   }
 }
