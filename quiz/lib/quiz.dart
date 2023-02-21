@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class Quiz extends StatefulWidget {
@@ -10,15 +8,16 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  int numeroPregunta = 0;
   String pregunta = 'ESTA ES LA PREGUNTA VERDADERA';
   List<Icon> aciertosErrores = [];
+
   List<String> preguntas = [
     'Los globulos rojos viven 4 meses?',
     'El cuerpo humano tiene 306 huesos?',
-    'La cobalamina es una vitamina'
+    'La cobalamina es una vitamina',
   ];
-  List<bool> respuesta = [true, true, false];
-  int numeroPregunta = 0;
+  List<bool> respuesta = [true, false, true];
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +98,20 @@ class _QuizState extends State<Quiz> {
   }
 
   void comprobar(bool usuario) {
-    if (respuesta[numeroPregunta] == usuario) {
+    if (respuesta.length - 1 != numeroPregunta) {
+      if (respuesta[numeroPregunta] == usuario) {
+        aciertosErrores.add(const Icon(
+          Icons.done,
+          color: Colors.green,
+          size: 40,
+        ));
+      } else {
+        aciertosErrores
+            .add(const Icon(Icons.close, color: Colors.red, size: 40));
+      }
       numeroPregunta++;
-      aciertosErrores.add(const Icon(
-        Icons.done,
-        color: Colors.green,
-        size: 40,
-      ));
     } else {
-      aciertosErrores.add(const Icon(Icons.close, color: Colors.red, size: 40));
+      numeroPregunta = 0;
     }
   }
 }
