@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz/pantalla_final.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -11,7 +12,6 @@ class _QuizState extends State<Quiz> {
   int numeroPregunta = 0;
   String pregunta = 'ESTA ES LA PREGUNTA VERDADERA';
   List<Icon> aciertosErrores = [];
-
   List<String> preguntas = [
     'Los globulos rojos viven 4 meses?',
     'El cuerpo humano tiene 306 huesos?',
@@ -98,7 +98,7 @@ class _QuizState extends State<Quiz> {
   }
 
   void comprobar(bool usuario) {
-    if (respuesta.length - 1 != numeroPregunta) {
+    if (numeroPregunta != preguntas.length - 1) {
       if (respuesta[numeroPregunta] == usuario) {
         aciertosErrores.add(const Icon(
           Icons.done,
@@ -111,6 +111,8 @@ class _QuizState extends State<Quiz> {
       }
       numeroPregunta++;
     } else {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const PantallaFinal()));
       numeroPregunta = 0;
     }
   }
