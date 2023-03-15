@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:balance/widgets/balance_wt/back_sheet.dart';
+import 'package:balance/widgets/balance_wt/front_sheet.dart';
 import 'package:flutter/material.dart';
 
 class Balance extends StatefulWidget {
@@ -53,7 +54,9 @@ class _BalanceState extends State<Balance> {
                 style: TextStyle(
                     fontSize: 30,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                    wordSpacing: 0.2),
               ),
               Text(
                 ' Balance ',
@@ -69,24 +72,10 @@ class _BalanceState extends State<Balance> {
             delegate: SliverChildListDelegate([
           Stack(
             children: [
-              Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorDark,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30))),
-                  child: BackSheet()),
+              const BackSheet(),
               Padding(
                 padding: EdgeInsets.only(top: _max),
-                child: Container(
-                  height: 800,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30))),
-                ),
+                child: FrontSheet(),
               )
             ],
           )

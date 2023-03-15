@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
+
 class BackSheet extends StatelessWidget {
   const BackSheet({super.key});
 
@@ -15,17 +17,15 @@ class BackSheet extends StatelessWidget {
             ),
             child: Text(
               nombre,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).cardColor,
-                  letterSpacing: 1.2),
+              style: const TextStyle(
+                  fontSize: 20, color: Colors.grey, letterSpacing: 1.2),
             ),
           ),
           Text(
             cantidad,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 20,
-                color: Theme.of(context).cardColor,
+                color: Colors.white,
                 letterSpacing: 1.5,
                 fontWeight: FontWeight.bold),
           )
@@ -33,17 +33,22 @@ class BackSheet extends StatelessWidget {
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _headers('Ingresos', '\$ 1,500.00'),
-        const VerticalDivider(
-          thickness: 1,
-          indent: 13,
-          endIndent: 13,
-        ),
-        _headers('Gastos', '\$1,500.00')
-      ],
+    return Container(
+      height: 250,
+      decoration:
+          Constants.sheetBoxDecoration(Theme.of(context).primaryColorDark),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _headers('Ingresos', '\$ 1,500.00'),
+          const VerticalDivider(
+            thickness: 1,
+            indent: 13,
+            endIndent: 13,
+          ),
+          _headers('Gastos', '\$1,500.00')
+        ],
+      ),
     );
   }
 }
