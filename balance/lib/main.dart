@@ -1,3 +1,5 @@
+import 'package:balance/pages/add_entries.dart';
+import 'package:balance/pages/add_expenses.dart';
 import 'package:balance/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       routes: {
         'home': (_) => const HomePage(),
+        'expenses': (_) => const AddExpenses(),
+        'entries': (_) => const AddEntries()
       },
       initialRoute: 'home',
     );

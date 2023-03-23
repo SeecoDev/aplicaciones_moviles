@@ -19,7 +19,7 @@ class CustomNavigationBar extends StatelessWidget {
             icon: Icon(Icons.currency_bitcoin_sharp), label: 'Crypto'),
         BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
       ],
-      elevation: 2,
+      elevation: 5,
     );
   }
 }
