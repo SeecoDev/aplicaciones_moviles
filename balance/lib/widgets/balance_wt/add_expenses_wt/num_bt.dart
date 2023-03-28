@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:balance/widgets/balance_wt/constants.dart';
 
 class NumKeyboard extends StatefulWidget {
   const NumKeyboard({super.key});
@@ -10,8 +11,38 @@ class NumKeyboard extends StatefulWidget {
 class _NumKeyboardState extends State<NumKeyboard> {
   String importe = '0.00';
 
+  bool comprobarValor(String valor) {
+    RegExp reg = RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$');
+    if (reg.hasMatch(valor)) {
+      return true;
+    }
+    return false;
+  }
+
+  String formatearImporte(String valor, String concat) {
+    if (valor == '0.00') valor = '';
+    if (valor.startsWith('0') & !valor.contains('.')) {
+      valor = valor.substring(1, valor.length);
+    }
+    if (valor.startsWith('.')) {
+      valor = '0' + valor;
+    }
+    if (valor.contains('.')) {
+      if (comprobarValor(valor + concat)) {
+        valor += concat;
+      }
+    } else {
+      valor += concat;
+    }
+    return valor;
+  }
+
   @override
   Widget build(BuildContext context) {
+    String Function(Match) mathFunc;
+    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    mathFunc = (Match match) => '${match[1]},';
+
     return GestureDetector(
       onTap: () => _numPad(),
       child: Padding(
@@ -20,7 +51,7 @@ class _NumKeyboardState extends State<NumKeyboard> {
           children: [
             const Text('Cantidad Ingresada:'),
             Text(
-              '\$ $importe',
+              '\$ ${importe.replaceAllMapped(reg, mathFunc)}',
               style: const TextStyle(
                   fontSize: 30,
                   color: Colors.white,
@@ -39,8 +70,7 @@ class _NumKeyboardState extends State<NumKeyboard> {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           setState(() {
-            if (importe == '0.00') importe = '';
-            importe += _text;
+            importe = formatearImporte(importe, _text);
           });
         },
         child: SizedBox(
@@ -57,75 +87,113 @@ class _NumKeyboardState extends State<NumKeyboard> {
 
     showModalBottomSheet(
         // isDismissible: true,
-        // enableDrag: false,
+        enableDrag: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: const RoundedRectangleBorder(
             borderRadius:
                 BorderRadiusDirectional.vertical(top: Radius.circular(30))),
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: 800,
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                var _height = constraints.biggest.height / 5;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Table(
-                      border: TableBorder.symmetric(
-                          inside: const BorderSide(
-                        color: Colors.grey,
-                        width: 0.5,
-                      )),
-                      children: [
-                        TableRow(children: [
-                          _num('1', _height),
-                          _num('2', _height),
-                          _num('3', _height)
-                        ]),
-                        TableRow(children: [
-                          _num('4', _height),
-                          _num('5', _height),
-                          _num('6', _height)
-                        ]),
-                        TableRow(children: [
-                          _num('7', _height),
-                          _num('8', _height),
-                          _num('9', _height)
-                        ]),
-                        TableRow(children: [
-                          _num('.', _height),
-                          _num('0', _height),
-                          GestureDetector(
-                            onLongPress: () {
-                              setState(() {
-                                importe = '0.00';
-                              });
-                            },
-                            onTap: () {
-                              setState(() {
-                                if (importe.isNotEmpty) {
-                                  importe =
-                                      importe.substring(0, importe.length - 1);
-                                }
-                              });
-                            },
-                            behavior: HitTestBehavior.opaque,
-                            child: SizedBox(
-                              height: _height,
-                              child: const Icon(
-                                Icons.backspace,
-                                color: Colors.grey,
+          return WillPopScope(
+            onWillPop: () async =>
+                false, // OnWillPopScope quita el poder de hacer un pop con el notch fisico
+            child: SizedBox(
+              height: 800,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  var _height = constraints.biggest.height / 5;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Table(
+                        border: TableBorder.symmetric(
+                            inside: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,
+                        )),
+                        children: [
+                          TableRow(children: [
+                            _num('1', _height),
+                            _num('2', _height),
+                            _num('3', _height)
+                          ]),
+                          TableRow(children: [
+                            _num('4', _height),
+                            _num('5', _height),
+                            _num('6', _height)
+                          ]),
+                          TableRow(children: [
+                            _num('7', _height),
+                            _num('8', _height),
+                            _num('9', _height)
+                          ]),
+                          TableRow(children: [
+                            _num('.', _height),
+                            _num('0', _height),
+                            GestureDetector(
+                              onLongPress: () {
+                                setState(() {
+                                  if (importe.contains('.')) {
+                                    importe = importe.substring(
+                                        0, importe.indexOf('.'));
+                                  } else {
+                                    importe = '0.00';
+                                  }
+                                });
+                              },
+                              onTap: () {
+                                setState(() {
+                                  if (importe.isNotEmpty) {
+                                    importe = importe.substring(
+                                        0, importe.length - 1);
+                                  }
+                                });
+                              },
+                              behavior: HitTestBehavior.opaque,
+                              child: SizedBox(
+                                height: _height,
+                                child: const Icon(
+                                  Icons.backspace,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          )
-                        ]),
-                      ],
-                    )
-                  ],
-                );
-              },
+                            )
+                          ]),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (importe.isEmpty) importe = '0.00';
+                                  Navigator.pop(context);
+                                });
+                              },
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: _height / 1.5,
+                              )),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  importe = '0.00';
+                                  Navigator.pop(context);
+                                });
+                              },
+                              icon: Icon(
+                                Icons.cancel,
+                                color: Colors.red,
+                                size: _height / 1.5,
+                              ))
+                        ],
+                      )
+                    ],
+                  );
+                },
+              ),
             ),
           );
         });
